@@ -1,0 +1,15 @@
+.gradient {
+    background-image: linear-gradient(to right, rgb(46, 98, 181) , rgb(17, 0, 73));
+}
+
+.headline {
+    color: white;
+}
+
+.search {
+    color: rgb(135, 135, 135);
+}
+
+.spacer {
+/* TODO figure out how to get the spacer to be thicker and black */
+}
