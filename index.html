@@ -22,7 +22,7 @@
                 <div class="col-4">
                     <h2>Search for a City:</h2>
                     <div class="row">
-                        <div class="col-12">
+                        <div class="searcher col-12">
                             <input id="search" class="search" value="San Diego">
                             <hr class="spacer"></hr>
                             <div id="history" class="history">
@@ -39,8 +39,79 @@
             </div>
         </div>
     </body>
-
+    
 
     <!-- jquery -->
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script>
+        // get search history
+        // var storage = JSON.parse(localStorage.getItem('history'))
+        var storage = {}
+        
+        if(!storage.history){
+            storage.history = []
+        } else {
+            for(i=0;i<storage.history.length;i++){
+                $(`<button data-city="${storage.history[i]}">${storage.history[i]}</button><br>`).appendTo(".searcher");
+            }
+        }
+        console.log(history)
+        $('.searcher').change(function (event){
+            var id = event.target.id
+            if(id === 'search'){
+                var text = $("input#search").val()              
+                $( `<button data-city="${text}">${text}</button><br>` ).appendTo( ".searcher" );
+                getCoords(text)
+            }
+
+        })
+        $( ".search" ).click(function(event) {
+            console.log('clicked')
+            $("#search").val('')
+        })
+        // use this function to get the coordinates of the city requested
+        function getCoords(city){
+            var url = 'https://chriscastle.com/proxy/index.php?:proxy:https://api.openweathermap.org/geo/1.0/direct?q=' + city + '&limit=1&appid=54fa67f822df4eb52c500eadbf44eeee'
+            // request a probable chord given first chord degree
+            fetch(url)
+            .then(function (resp) {
+
+                // Return the response as JSON
+                return resp;
+
+            }).then(function (data) {
+                // now with cords, run a fetch of the weather data
+
+                console.log(data)
+                
+                // getWeather(data.lat, data.lon)
+            }).catch(function (err) {
+
+                // Log any errors
+                console.log('something went wrong', err);
+
+            })
+        }
+        // use this function to get the weather data from lon and lat coordinates
+        function getWeather(lat, lon){
+            var url = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&appid=54fa67f822df4eb52c500eadbf44eeee`
+            fetch(url)
+            .then(function (resp) {
+
+                // Return the response as JSON
+                return resp;
+
+            }).then(function (data) {
+                // now with cords, run a fetch of the weather data
+                
+                console.log(data)
+            }).catch(function (err) {
+
+                // Log any errors
+                console.log('something went wrong', err);
+
+            })
+        }
+  
+    </script>
 </html>
