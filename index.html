@@ -13,7 +13,7 @@
     
     <body>
         <div class="row gradient no-gutters">
-            <div class="headline col">
+            <div class="headline col text-center">
               <h1>Weather Dashboard</h1>
             </div>
           </div>
@@ -25,7 +25,7 @@
                     <h2>Search for a City:</h2>
                     <div class="row">
                         <div class="searcher col-12">
-                            <input id="search" class="search" value="San Diego">
+                            <input width="100%" id="search" class="search" value="Type City & Hit 'Enter'">
                             <hr class="spacer"></hr>
                             <div id="history" class="history">
 
@@ -109,25 +109,24 @@
         } else {
             storage = JSON.parse(localStorage.getItem('citySearches'))
             for(i=0;i<storage.length;i++){
-                $(`<button data-city="${storage[i]}">${storage[i]}</button><br>`).appendTo(".history");
+                $(`<button class="btn btn-secondary btn-block" data-city="${storage[i]}">${storage[i]}</button><br>`).appendTo(".history");
             }
         }
-        console.log(storage)
+
         $('.searcher').change(function (event){
             var id = event.target.id
-            console.log(event.target)
             if(id === 'search'){
-                var text = $("input#search").val()              
+                var text = $("input#search").val()  
                 getWeather(text)
                 var storage = JSON.parse(localStorage.getItem('citySearches'))
                 if(storage.length >=8){
                     storage.shift()
                     $('#history').empty()
                     for(i=0;i<storage.length;i++){
-                        $(`<button data-city="${storage[i]}">${storage[i]}</button><br>`).appendTo(".history");
+                        $(`<button class="btn btn-secondary btn-block" data-city="${storage[i]}">${storage[i]}</button><br>`).appendTo(".history");
                     }
                 } 
-                $(`<button data-city="${text}">${text}</button><br>`).appendTo( ".history" );
+                $(`<button class="btn btn-secondary btn-block" data-city="${text}">${text}</button><br>`).appendTo( ".history" );
 
                 storage.push(text)
                 // store text in history array
@@ -136,7 +135,6 @@
 
         })
         $( ".search" ).click(function(event) {
-            console.log('clicked')
             $("#search").val('')
         })
         // TODO: recall past 8 searches
@@ -144,7 +142,7 @@
         // listen for clicks on any of the past search buttons
           // listen for container click events:
           $( "#history" ).click(function( event ) {
-            //   console.log(event.target)
+
               getWeather(event.target.dataset.city)
         //   if(event.target.dataset.save){
         //     var appointmentTime = event.target.dataset.save
@@ -177,8 +175,6 @@
                 "method": "GET"
             }
             $.ajax(settings).done(function (res) {
-                console.log(res)
-
                 // this is today
                 var name = res.city.name
                 day = moment().format('M/D/YYYY')
