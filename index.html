@@ -34,19 +34,23 @@
 
                     </div>
                 </div>
-                <div class="col-9" style="border: 1px solid rgb(0, 0, 0)">
+                <div class="col-9" >
                     
-                    <div id="CityToday">
-                        <h2></h2>
+                    <div id="CityToday" style="border: 1px solid rgb(0, 0, 0)">
+                        <h2> </h2>
                         
-                        <div id="tempToday"></div>
-                        <div id="windToday"></div>
-                        <div id="humidityToday"></div>
+                        <div id="tempToday"> </div>
+                        <div id="windToday"> </div>
+                        <div id="humidityToday"> </div>
                     </div>
-                    <div>
-                        <h3 id="5dayForecast"></h3>
+
+                    <div class="row">
+                       
+                            <h3 id="forecast"></h3>
+                        
                     </div>
                     <div class="row row-cols-5">
+
                         <div class="col" style="background: rgb(0, 37, 57)">
                             <div id="Day1"></div>
                             <img id="imgDay1" src="">
@@ -99,22 +103,35 @@
     <script>
         // get search history
         // var storage = JSON.parse(localStorage.getItem('history'))
-        var storage = {}
-        
-        if(!storage.history){
-            storage.history = []
+        var storage = []
+        if(!localStorage.getItem('citySearches')){
+            localStorage.setItem('citySearches', JSON.stringify(storage))
         } else {
-            for(i=0;i<storage.history.length;i++){
-                $(`<button data-city="${storage.history[i]}">${storage.history[i]}</button><br>`).appendTo(".searcher");
+            storage = JSON.parse(localStorage.getItem('citySearches'))
+            for(i=0;i<storage.length;i++){
+                $(`<button data-city="${storage[i]}">${storage[i]}</button><br>`).appendTo(".history");
             }
         }
-        console.log(history)
+        console.log(storage)
         $('.searcher').change(function (event){
             var id = event.target.id
+            console.log(event.target)
             if(id === 'search'){
                 var text = $("input#search").val()              
-                $( `<button data-city="${text}">${text}</button><br>` ).appendTo( ".history" );
                 getWeather(text)
+                var storage = JSON.parse(localStorage.getItem('citySearches'))
+                if(storage.length >=8){
+                    storage.shift()
+                    $('#history').empty()
+                    for(i=0;i<storage.length;i++){
+                        $(`<button data-city="${storage[i]}">${storage[i]}</button><br>`).appendTo(".history");
+                    }
+                } 
+                $(`<button data-city="${text}">${text}</button><br>`).appendTo( ".history" );
+
+                storage.push(text)
+                // store text in history array
+                localStorage.setItem('citySearches', JSON.stringify(storage))
             }
 
         })
@@ -124,7 +141,7 @@
         })
         // TODO: recall past 8 searches
 
-        //TODO: listen for clicks on any of the past search buttons
+        // listen for clicks on any of the past search buttons
           // listen for container click events:
           $( "#history" ).click(function( event ) {
             //   console.log(event.target)
@@ -172,6 +189,7 @@
                 $("div#windToday").html(`Wind: ${res.list[1].wind.speed} km/h`)
                 $("div#humidityToday").html(`Humidity: ${res.list[1].main.humidity}%`)
 
+                $("#forecast").html(`5-Day Forecast:`)
                 // forecast day 1
                 day1 = moment().add(1, 'days').format('M/D/YYYY')
                 $("#Day1").html(`${day1}`).css('color', 'white')
