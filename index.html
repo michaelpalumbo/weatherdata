@@ -21,7 +21,7 @@
 
             </div>
             <div class="row">
-                <div class="col-4">
+                <div class="col-3">
                     <h2>Search for a City:</h2>
                     <div class="row">
                         <div class="searcher col-12">
@@ -34,7 +34,7 @@
 
                     </div>
                 </div>
-                <div class="col-8" style="border: 1px solid rgb(0, 0, 0)">
+                <div class="col-9" style="border: 1px solid rgb(0, 0, 0)">
                     
                     <div id="CityToday">
                         <h2></h2>
@@ -49,30 +49,35 @@
                     <div class="row row-cols-5">
                         <div class="col" style="background: rgb(0, 37, 57)">
                             <div id="Day1"></div>
+                            <img id="imgDay1" src="">
                             <div id="tempDay1"></div>
                             <div id="windDay1"></div>
                             <div id="humidityDay1"></div>
                         </div>
                         <div class="col" style="background: rgb(0, 37, 57)">
                             <div id="Day2"></div>
+                            <img id="imgDay2" src="">
                             <div id="tempDay2"></div>
                             <div id="windDay2"></div>
                             <div id="humidityDay2"></div>
                         </div>
                         <div class="col" style="background: rgb(0, 37, 57)">
                             <div id="Day3"></div>
+                            <img id="imgDay3" src="">
                             <div id="tempDay3"></div>
                             <div id="windDay3"></div>
                             <div id="humidityDay3"></div>
                         </div>
                         <div class="col" style="background: rgb(0, 37, 57)">
                             <div id="Day4"></div>
+                            <img id="imgDay4" src="">
                             <div id="tempDay4"></div>
                             <div id="windDay4"></div>
                             <div id="humidityDay4"></div>
                         </div>
                         <div class="col" style="background: rgb(0, 37, 57)">
                             <div id="Day5"></div>
+                            <img id="imgDay5" src="">
                             <div id="tempDay5"></div>
                             <div id="windDay5"></div>
                             <div id="humidityDay5"></div>
@@ -108,7 +113,7 @@
             var id = event.target.id
             if(id === 'search'){
                 var text = $("input#search").val()              
-                $( `<button data-city="${text}">${text}</button><br>` ).appendTo( ".searcher" );
+                $( `<button data-city="${text}">${text}</button><br>` ).appendTo( ".history" );
                 getWeather(text)
             }
 
@@ -117,6 +122,20 @@
             console.log('clicked')
             $("#search").val('')
         })
+        // TODO: recall past 8 searches
+
+        //TODO: listen for clicks on any of the past search buttons
+          // listen for container click events:
+          $( "#history" ).click(function( event ) {
+            //   console.log(event.target)
+              getWeather(event.target.dataset.city)
+        //   if(event.target.dataset.save){
+        //     var appointmentTime = event.target.dataset.save
+        //     var appointmentText = $(`#${appointmentTime}`).val();
+        //     localStorage.setItem(appointmentTime, appointmentText);
+            
+        //   }
+        });
 
         // get weatherdata using ajax (fetch isn't working due to CORS)
         function getWeather(city){
@@ -155,35 +174,44 @@
 
                 // forecast day 1
                 day1 = moment().add(1, 'days').format('M/D/YYYY')
-                $("#Day1").html(`${day1} <img src="http://openweathermap.org/img/wn/${res.list[2].weather[0].icon}@2x.png">`).css('color', 'white')
+                $("#Day1").html(`${day1}`).css('color', 'white')
+                $("#imgDay1").attr("src",`http://openweathermap.org/img/wn/${res.list[2].weather[0].icon}@2x.png`);
                 $("#tempDay1").html(`Temp: ${res.list[2].main.temp}&degC`).css('color', 'white')
                 $("#windDay1").html(`Wind: ${res.list[2].wind.speed} km/h`).css('color', 'white')
                 $("#humidityDay1").html(`Humidity: ${res.list[2].main.humidity}%`).css('color', 'white')
 
                 // forecast day 2
                 day2 = moment().add(2, 'days').format('M/D/YYYY')
-                $("#Day2").html(`${day2} <img src="http://openweathermap.org/img/wn/${res.list[3].weather[0].icon}@2x.png">`).css('color', 'white')
+                $("#Day2").html(`${day2}`).css('color', 'white')
+                $("#imgDay2").attr("src",`http://openweathermap.org/img/wn/${res.list[3].weather[0].icon}@2x.png`);
+
                 $("#tempDay2").html(`Temp: ${res.list[3].main.temp}&degC`).css('color', 'white')
                 $("#windDay2").html(`Wind: ${res.list[3].wind.speed} km/h`).css('color', 'white')
                 $("#humidityDay2").html(`Humidity: ${res.list[3].main.humidity}%`).css('color', 'white')
 
                 // forecast day 3
                 day3 = moment().add(3, 'days').format('M/D/YYYY')
-                $("#Day3").html(`${day3} <img src="http://openweathermap.org/img/wn/${res.list[4].weather[0].icon}@2x.png">`).css('color', 'white')
+                $("#Day3").html(`${day3}`).css('color', 'white')
+                $("#imgDay3").attr("src",`http://openweathermap.org/img/wn/${res.list[4].weather[0].icon}@2x.png`);
+
                 $("#tempDay3").html(`Temp: ${res.list[4].main.temp}&degC`).css('color', 'white')
                 $("#windDay3").html(`Wind: ${res.list[4].wind.speed} km/h`).css('color', 'white')
                 $("#humidityDay3").html(`Humidity: ${res.list[4].main.humidity}%`).css('color', 'white')
 
                 // forecast day 1
                 day4 = moment().add(4, 'days').format('M/D/YYYY')
-                $("#Day4").html(`${day4} <img src="http://openweathermap.org/img/wn/${res.list[5].weather[0].icon}@2x.png">`).css('color', 'white')
+                $("#Day4").html(`${day4}`).css('color', 'white')
+                $("#imgDay4").attr("src",`http://openweathermap.org/img/wn/${res.list[5].weather[0].icon}@2x.png`);
+
                 $("#tempDay4").html(`Temp: ${res.list[5].main.temp}&degC`).css('color', 'white')
                 $("#windDay4").html(`Wind: ${res.list[5].wind.speed} km/h`).css('color', 'white')
                 $("#humidityDay4").html(`Humidity: ${res.list[5].main.humidity}%`).css('color', 'white')
 
                 // forecast day 5
                 day5 = moment().add(5, 'days').format('M/D/YYYY')
-                $("#Day5").html(`${day5} <img src="http://openweathermap.org/img/wn/${res.list[6].weather[0].icon}@2x.png">`).css('color', 'white')
+                $("#Day5").html(`${day5}`).css('color', 'white')
+                $("#imgDay5").attr("src",`http://openweathermap.org/img/wn/${res.list[6].weather[0].icon}@2x.png`);
+
                 $("#tempDay5").html(`Temp: ${res.list[6].main.temp}&degC`).css('color', 'white')
                 $("#windDay5").html(`Wind: ${res.list[6].wind.speed} km/h`).css('color', 'white')
                 $("#humidityDay5").html(`Humidity: ${res.list[6].main.humidity}%`).css('color', 'white')
