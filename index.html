@@ -8,15 +8,17 @@
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
         <link rel="stylesheet" href="./assets/css/style.css" >
         <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.3/moment.min.js"></script>
     </head>
     
     <body>
-        <div class="container">
-            <div class="row gradient no-gutters">
-              <div class="headline col">
-                <h1>Weather Dashboard</h1>
-              </div>
+        <div class="row gradient no-gutters">
+            <div class="headline col">
+              <h1>Weather Dashboard</h1>
             </div>
+          </div>
+        <div class="container">
+
             </div>
             <div class="row">
                 <div class="col-4">
@@ -32,8 +34,57 @@
 
                     </div>
                 </div>
-                <div class="col-8">
-                display weather (big)
+                <div class="col-8" style="border: 1px solid rgb(0, 0, 0)">
+                    
+                    <div id="CityToday">
+                        <h2></h2>
+                        
+                        <div id="tempToday"></div>
+                        <div id="windToday"></div>
+                        <div id="humidityToday"></div>
+                    </div>
+                    <div>
+                        <h3 id="5dayForecast"></h3>
+                    </div>
+                    <div class="row row-cols-5">
+                        <div class="col" style="background: rgb(0, 37, 57)">
+                            <div id="Day1"></div>
+                            <div id="tempDay1"></div>
+                            <div id="windDay1"></div>
+                            <div id="humidityDay1"></div>
+                        </div>
+                        <div class="col" style="background: rgb(0, 37, 57)">
+                            <div id="Day2"></div>
+                            <div id="tempDay2"></div>
+                            <div id="windDay2"></div>
+                            <div id="humidityDay2"></div>
+                        </div>
+                        <div class="col" style="background: rgb(0, 37, 57)">
+                            <div id="Day3"></div>
+                            <div id="tempDay3"></div>
+                            <div id="windDay3"></div>
+                            <div id="humidityDay3"></div>
+                        </div>
+                        <div class="col" style="background: rgb(0, 37, 57)">
+                            <div id="Day4"></div>
+                            <div id="tempDay4"></div>
+                            <div id="windDay4"></div>
+                            <div id="humidityDay4"></div>
+                        </div>
+                        <div class="col" style="background: rgb(0, 37, 57)">
+                            <div id="Day5"></div>
+                            <div id="tempDay5"></div>
+                            <div id="windDay5"></div>
+                            <div id="humidityDay5"></div>
+                        </div>
+                        
+
+                    </div>
+
+
+
+                    
+                    
                 </div>
 
             </div>
@@ -72,62 +123,81 @@
             var settings = {
                 "async": true,
                 "crossDomain": true,
-                "url": `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=54fa67f822df4eb52c500eadbf44eeee`,
-                "method": "GET",
-                // "headers": {
-                //   "x-rapidapi-host": "community-open-weather-map.p.rapidapi.com",
-                //   "x-rapidapi-key": "SIGN-UP-FOR-KEY"
-                // }
+                "url": `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=54fa67f822df4eb52c500eadbf44eeee&units=metric`,
+                "method": "GET"
             }
             $.ajax(settings).done(function (response) {
-                console.log(response);
+                // run another call this time using coords
+                forecast(response.coord.lon, response.coord.lat)
             });
         }
 
-        // use this function to get the coordinates of the city requested
-        // function getCoords(city){
-        //     console.log(city)
-        //     var url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=54fa67f822df4eb52c500eadbf44eeee`
-        //     // request a probable chord given first chord degree
-        //     fetch(url)
-        //     .then(function (resp) {
-        //         console.log(resp)
-        //         // Return the response as JSON
-        //         return resp;
 
-        //     }).then(function (data) {
-        //         // now with cords, run a fetch of the weather data
+        function forecast(lon, lat){
+            var settings = {
+                "async": true,
+                "crossDomain": true,
+                "url": `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=54fa67f822df4eb52c500eadbf44eeee&units=metric`,
+                "method": "GET"
+            }
+            $.ajax(settings).done(function (res) {
+                console.log(res)
 
-        //         console.log(data)
-                
-        //         // getWeather(data.lat, data.lon)
-        //     }).catch(function (err) {
+                // this is today
+                var name = res.city.name
+                day = moment().format('M/D/YYYY')
+                icon= res.list[1].weather[0].icon
+                $("div#CityToday h2").html(`${name} ${day} <img src="http://openweathermap.org/img/wn/${icon}@2x.png">`)
 
-        //         // Log any errors
-        //         console.log('something went wrong', err);
+                $("div#tempToday").html(`Temp: ${res.list[1].main.temp}&degC`)
+                $("div#windToday").html(`Wind: ${res.list[1].wind.speed} km/h`)
+                $("div#humidityToday").html(`Humidity: ${res.list[1].main.humidity}%`)
 
-        //     })
-        // }
-        // // use this function to get the weather data from lon and lat coordinates
-        // function getWeather(lat, lon){
-        //     var url = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&appid=54fa67f822df4eb52c500eadbf44eeee`
-        //     fetch(url)
-        //     .then(function (resp) {
+                // forecast day 1
+                day1 = moment().add(1, 'days').format('M/D/YYYY')
+                $("#Day1").html(`${day1} <img src="http://openweathermap.org/img/wn/${res.list[2].weather[0].icon}@2x.png">`).css('color', 'white')
+                $("#tempDay1").html(`Temp: ${res.list[2].main.temp}&degC`).css('color', 'white')
+                $("#windDay1").html(`Wind: ${res.list[2].wind.speed} km/h`).css('color', 'white')
+                $("#humidityDay1").html(`Humidity: ${res.list[2].main.humidity}%`).css('color', 'white')
 
-        //         // Return the response as JSON
-        //         return resp;
+                // forecast day 2
+                day2 = moment().add(2, 'days').format('M/D/YYYY')
+                $("#Day2").html(`${day2} <img src="http://openweathermap.org/img/wn/${res.list[3].weather[0].icon}@2x.png">`).css('color', 'white')
+                $("#tempDay2").html(`Temp: ${res.list[3].main.temp}&degC`).css('color', 'white')
+                $("#windDay2").html(`Wind: ${res.list[3].wind.speed} km/h`).css('color', 'white')
+                $("#humidityDay2").html(`Humidity: ${res.list[3].main.humidity}%`).css('color', 'white')
 
-        //     }).then(function (data) {
-        //         // now with cords, run a fetch of the weather data
-                
-        //         console.log(data)
-        //     }).catch(function (err) {
+                // forecast day 3
+                day3 = moment().add(3, 'days').format('M/D/YYYY')
+                $("#Day3").html(`${day3} <img src="http://openweathermap.org/img/wn/${res.list[4].weather[0].icon}@2x.png">`).css('color', 'white')
+                $("#tempDay3").html(`Temp: ${res.list[4].main.temp}&degC`).css('color', 'white')
+                $("#windDay3").html(`Wind: ${res.list[4].wind.speed} km/h`).css('color', 'white')
+                $("#humidityDay3").html(`Humidity: ${res.list[4].main.humidity}%`).css('color', 'white')
 
-        //         // Log any errors
-        //         console.log('something went wrong', err);
+                // forecast day 1
+                day4 = moment().add(4, 'days').format('M/D/YYYY')
+                $("#Day4").html(`${day4} <img src="http://openweathermap.org/img/wn/${res.list[5].weather[0].icon}@2x.png">`).css('color', 'white')
+                $("#tempDay4").html(`Temp: ${res.list[5].main.temp}&degC`).css('color', 'white')
+                $("#windDay4").html(`Wind: ${res.list[5].wind.speed} km/h`).css('color', 'white')
+                $("#humidityDay4").html(`Humidity: ${res.list[5].main.humidity}%`).css('color', 'white')
 
-        //     })
-        // }
-  
+                // forecast day 5
+                day5 = moment().add(5, 'days').format('M/D/YYYY')
+                $("#Day5").html(`${day5} <img src="http://openweathermap.org/img/wn/${res.list[6].weather[0].icon}@2x.png">`).css('color', 'white')
+                $("#tempDay5").html(`Temp: ${res.list[6].main.temp}&degC`).css('color', 'white')
+                $("#windDay5").html(`Wind: ${res.list[6].wind.speed} km/h`).css('color', 'white')
+                $("#humidityDay5").html(`Humidity: ${res.list[6].main.humidity}%`).css('color', 'white')
+            });
+        }
+
+        function currentDay(res){
+
+
+            $("#5dayForecast").html(`5-Day Forecast:`)
+            
+            
+        }
+
+        
     </script>
 </html>

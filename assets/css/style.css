@@ -13,3 +13,11 @@
 .spacer {
 /* TODO figure out how to get the spacer to be thicker and black */
 }
+
+.col-xs-2{
+    background:#00f;
+    color:#FFF;
+}
+.col-half-offset{
+    margin-left:4.166666667%
+}
