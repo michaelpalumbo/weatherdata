@@ -1,0 +1,17 @@
+<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+
+<script>
+var settings = {
+    "async": true,
+    "crossDomain": true,
+    "url": "https://api.openweathermap.org/data/2.5/weather?q=Toronto&appid=54fa67f822df4eb52c500eadbf44eeee",
+    "method": "GET",
+    // "headers": {
+    //   "x-rapidapi-host": "community-open-weather-map.p.rapidapi.com",
+    //   "x-rapidapi-key": "SIGN-UP-FOR-KEY"
+    // }
+  }
+  $.ajax(settings).done(function (response) {
+    console.log(response);
+  });
+</script>
